@@ -3,8 +3,24 @@ import 'bootstrap/dist/css/bootstrap-grid.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { observer, inject } from 'mobx-react';
 
-class App extends React.PureComponent {
+const propTypes = {
+  userStore: PropTypes.shape({
+    user: PropTypes.shape({}),
+    fetchUser: PropTypes.func,
+  }),
+};
+
+const defaultProps = {
+  userStore: {},
+};
+
+// @inject(({ userStore }) => ({ userStore }))
+@inject('userStore')
+@observer
+class App extends React.Component {
   render() {
     return (
       <div className="container-fluid p-3">
@@ -15,7 +31,15 @@ class App extends React.PureComponent {
                 Demo
               </div>
               <div className="card-body">
-                123
+                <div>
+                  {JSON.stringify(this.props.userStore.user)}
+                </div>
+
+                <div className="mt-2">
+                  <div className="btn-primary btn">
+                    获取用户
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -24,5 +48,8 @@ class App extends React.PureComponent {
     );
   }
 }
+
+App.propTypes = propTypes;
+App.defaultProps = defaultProps;
 
 export default App;
