@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import { autorun } from 'mobx';
-import userStore from './store/userStore';
-
+import * as stores from './stores';
 import App from './App';
 
 function init() {
-  userStore.fetchUser();
-
   ReactDOM.render(
-    <Provider store={{ userStore }}>
+    <Provider {...stores}>
       <App />
     </Provider>,
     document.querySelector('#main'),
@@ -18,4 +14,3 @@ function init() {
 }
 
 window.addEventListener('load', init);
-

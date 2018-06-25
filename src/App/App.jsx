@@ -4,52 +4,34 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import Devices from './Devices';
+import User from './User';
 
-const propTypes = {
-  userStore: PropTypes.shape({
-    user: PropTypes.shape({}),
-    fetchUser: PropTypes.func,
-  }),
-};
-
-const defaultProps = {
-  userStore: {},
-};
-
-// @inject(({ userStore }) => ({ userStore }))
-@inject('userStore')
-@observer
-class App extends React.Component {
-  render() {
-    return (
-      <div className="container-fluid p-3">
-        <div className="row">
-          <div className="col-3">
-            <div className="card">
-              <div className="card-header">
-                Demo
-              </div>
-              <div className="card-body">
-                <div>
-                  {JSON.stringify(this.props.userStore.user)}
-                </div>
-
-                <div className="mt-2">
-                  <div className="btn-primary btn">
-                    获取用户
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+const App = ({ isFetching }) => (
+  <div className="container-fluid p-3">
+    {isFetching && (
+      <div className="mb-3">
+        Loading...
       </div>
-    );
-  }
-}
+    )}
 
-App.propTypes = propTypes;
-App.defaultProps = defaultProps;
+    <div className="row">
+      <div className="col-6">
+        <User />
+      </div>
 
-export default App;
+      <div className="col-6">
+        <Devices />
+      </div>
+    </div>
+  </div>
+);
+
+App.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+};
+
+export default inject((
+  { commonStore: { isFetching = false } } = {},
+) => ({ isFetching }))(observer(App));
